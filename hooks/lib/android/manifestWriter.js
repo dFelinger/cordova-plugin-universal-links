@@ -150,15 +150,26 @@ function isCategoriesForUniversalLinks(categories) {
  * @return {Boolean} true - if data tag for Universal Links; otherwise - false
  */
 function isDataTagForUniversalLinks(data) {
-    // can have only 1 data tag in the intent-filter
-    if (data == null || data.length != 1) {
+    // can have many data tags in the intent-filter
+    if (data == null) {
         return false;
     }
 
-    var dataHost = data[0]['$']['android:host'];
-    var dataScheme = data[0]['$']['android:scheme'];
-    var hostIsSet = dataHost != null && dataHost.length > 0;
-    var schemeIsSet = dataScheme != null && dataScheme.length > 0;
+    var hostIsSet = false;
+    var schemeIsSet = false;
+
+    data.forEach(function(d) {
+      var dataHost = d['$']['android:host'];
+      var dataScheme = d['$']['android:scheme'];
+
+      if (dataHost != null && dataHost.length > 0) {
+        hostIsSet = true;
+      }
+
+      if (dataScheme != null && dataScheme.length > 0) {
+        schemeIsSet = true;
+      }
+    });
 
     return hostIsSet && schemeIsSet;
 }
@@ -282,8 +293,11 @@ function createIntentFilter(host, scheme, pathName) {
         }],
         'data': [{
             '$': {
-                'android:host': host,
                 'android:scheme': scheme
+            }
+        }, {
+            '$': {
+              'android:host': host
             }
         }]
     };
@@ -314,7 +328,11 @@ function injectPathComponentIntoIntentFilter(intentFilter, pathName) {
         pathName = '/' + pathName;
     }
 
-    intentFilter['data'][0]['$'][attrKey] = pathName;
+    intentFilter['data'].push({
+        '$': {
+            [attrKey]: pathName
+        }
+    });
 }
 
 // endregion
