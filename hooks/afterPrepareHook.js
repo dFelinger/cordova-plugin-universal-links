@@ -9,7 +9,7 @@ var configParser = require('./lib/configXmlParser.js');
 var androidManifestWriter = require('./lib/android/manifestWriter.js');
 var androidWebHook = require('./lib/android/webSiteHook.js');
 var iosAppSiteAssociationFile = require('./lib/ios/appleAppSiteAssociationFile.js');
-var iosProjectPreferences = require('./lib/ios/xcodePreferences.js');
+// var iosProjectPreferences = require('./lib/ios/xcodePreferences.js');
 var ANDROID = 'android';
 var IOS = 'ios';
 
@@ -75,7 +75,7 @@ function activateUniversalLinksInAndroid(cordovaContext, pluginPreferences) {
  */
 function activateUniversalLinksInIos(cordovaContext, pluginPreferences) {
   // modify xcode project preferences
-  iosProjectPreferences.enableAssociativeDomainsCapability(cordovaContext);
+  // iosProjectPreferences.enableAssociativeDomainsCapability(cordovaContext);
 
   // generate apple-site-association-file
   iosAppSiteAssociationFile.generate(cordovaContext, pluginPreferences);
